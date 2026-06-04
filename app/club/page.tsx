@@ -1,200 +1,77 @@
-// (GITHUB-PUTANJA-FILE: /abasa-sport/app/club/page.tsx)
-
-"use client";
-
-import { useEffect, useState } from "react";
-import Sidebar from "@/components/Sidebar";
-import { supabase } from "@/lib/supabase";
-
-export default function ClubSettingsPage() {
-  const [club, setClub] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-
-  const [name, setName] = useState("");
-  const [sport, setSport] = useState("");
-  const [currency, setCurrency] = useState("");
-
-  const [logoFile, setLogoFile] = useState<File | null>(null);
-  const [logoPreview, setLogoPreview] = useState<string | null>(null);
-
-  useEffect(() => {
-    async function loadClub() {
-      const { data: session } = await supabase.auth.getUser();
-      if (!session?.user) return;
-
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("club_id")
-        .eq("id", session.user.id)
-        .single();
-
-      if (!profile?.club_id) return;
-
-      const res = await fetch(`/api/club/info?club_id=${profile.club_id}`);
-      const json = await res.json();
-
-      if (json.success) {
-        setClub(json.data);
-        setName(json.data.name);
-        setSport(json.data.sport);
-        setCurrency(json.data.currency);
-        setLogoPreview(json.data.logo_url);
-      }
-
-      setLoading(false);
-    }
-
-    loadClub();
-  }, []);
-
-  async function saveChanges() {
-    const res = await fetch("/api/club/update", {
-      method: "POST",
-      body: JSON.stringify({
-        club_id: club.id,
-        name,
-        sport,
-        currency,
-      }),
-    });
-
-    const json = await res.json();
-    if (json.success) {
-      alert("Club updated successfully");
-    } else {
-      alert(json.error);
-    }
-  }
-
-  async function uploadLogo() {
-    if (!logoFile) return;
-
-    const formData = new FormData();
-    formData.append("file", logoFile);
-    formData.append("club_id", club.id);
-
-    const res = await fetch("/api/club/logo-upload", {
-      method: "POST",
-      body: formData,
-    });
-
-    const json = await res.json();
-    if (json.success) {
-      setLogoPreview(json.url);
-      alert("Logo uploaded");
-    } else {
-      alert(json.error);
-    }
-  }
-
-  async function deleteLogo() {
-    const res = await fetch("/api/club/logo-delete", {
-      method: "POST",
-      body: JSON.stringify({ club_id: club.id }),
-    });
-
-    const json = await res.json();
-    if (json.success) {
-      setLogoPreview(null);
-      alert("Logo deleted");
-    } else {
-      alert(json.error);
-    }
-  }
-
-  if (loading) {
-    return (
-      <div className="flex min-h-screen">
-        <Sidebar />
-        <div className="p-8">Loading...</div>
-      </div>
-    );
-  }
-
+export default function ClubPage() {
   return (
-    <div className="flex min-h-screen">
+    <div className="space-y-10">
 
-      {/* SIDEBAR */}
-      <Sidebar />
-
-      {/* MAIN CONTENT */}
-      <div className="flex-1 p-8">
-
-        <h1 className="text-3xl font-semibold mb-6">Club Settings</h1>
-
-        {/* LOGO */}
-        <div className="card mb-6">
-          <h2 className="text-xl font-medium mb-4">Club Logo</h2>
-
-          {logoPreview ? (
-            <img
-              src={logoPreview}
-              alt="Club Logo"
-              className="w-32 h-32 object-cover rounded-md mb-4"
-            />
-          ) : (
-            <div className="w-32 h-32 bg-gray-200 rounded-md mb-4 flex items-center justify-center">
-              No logo
-            </div>
-          )}
-
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => {
-              const file = e.target.files?.[0] || null;
-              setLogoFile(file);
-              if (file) setLogoPreview(URL.createObjectURL(file));
-            }}
-          />
-
-          <div className="flex gap-3 mt-4">
-            <button onClick={uploadLogo}>Upload Logo</button>
-            <button
-              onClick={deleteLogo}
-              className="bg-red-500 text-white px-4 py-2 rounded-md"
-            >
-              Delete Logo
-            </button>
-          </div>
-        </div>
-
-        {/* CLUB INFO */}
-        <div className="card">
-          <h2 className="text-xl font-medium mb-4">Club Information</h2>
-
-          <div className="space-y-4">
-            <input
-              type="text"
-              placeholder="Club Name"
-              className="w-full p-3 border rounded-md"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-
-            <input
-              type="text"
-              placeholder="Sport"
-              className="w-full p-3 border rounded-md"
-              value={sport}
-              onChange={(e) => setSport(e.target.value)}
-            />
-
-            <input
-              type="text"
-              placeholder="Currency (e.g. EUR)"
-              className="w-full p-3 border rounded-md"
-              value={currency}
-              onChange={(e) => setCurrency(e.target.value)}
-            />
-
-            <button onClick={saveChanges} className="w-full">
-              Save Changes
-            </button>
-          </div>
-        </div>
-
+      {/* HEADER */}
+      <div>
+        <h1 className="text-4xl font-bold">Klub</h1>
+        <p className="text-gray-600 mt-2">
+          Osnovne informacije o vašem sportskom klubu.
+        </p>
       </div>
+
+      {/* CLUB INFO CARD */}
+      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        <h3 className="text-xl font-semibold mb-4">Informacije o klubu</h3>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          <div>
+            <p className="text-sm text-gray-500">Naziv kluba</p>
+            <p className="text-lg font-medium">ABASA Sport</p>
+          </div>
+
+          <div>
+            <p className="text-sm text-gray-500">Grad</p>
+            <p className="text-lg font-medium">Pula</p>
+          </div>
+
+          <div>
+            <p className="text-sm text-gray-500">Email</p>
+            <p className="text-lg font-medium">kontakt@abasa.com</p>
+          </div>
+
+          <div>
+            <p className="text-sm text-gray-500">Telefon</p>
+            <p className="text-lg font-medium">+385 91 000 0000</p>
+          </div>
+
+        </div>
+      </div>
+
+      {/* COACHES */}
+      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        <h3 className="text-xl font-semibold mb-4">Treneri</h3>
+
+        <ul classname="space-y-3">
+          <li className="p-3 border rounded-lg hover:bg-gray-50 transition">
+            Marko Horvat — Glavni trener
+          </li>
+          <li className="p-3 border rounded-lg hover:bg-gray-50 transition">
+            Ana Kovač — Kondicijski trener
+          </li>
+          <li className="p-3 border rounded-lg hover:bg-gray-50 transition">
+            Ivan Marić — Pomoćni trener
+          </li>
+        </ul>
+      </div>
+
+      {/* MEMBERS */}
+      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        <h3 className="text-xl font-semibold mb-4">Članovi</h3>
+
+        <p className="text-gray-600">
+          Ukupno članova: <span className="font-semibold">128</span>
+        </p>
+
+        <a
+          href="/users"
+          className="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+        >
+          Pogledaj sve članove →
+        </a>
+      </div>
+
     </div>
   );
 }
