@@ -1,12 +1,9 @@
-// (GITHUB-PUTANJA-FILE: /abasa-sport/app/api/club/roles/route.ts)
-
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/middleware/auth";
 
 export async function GET(req: Request) {
   // AUTH → bilo koji logirani user može vidjeti role
-  const authResult = await requireAuth(req as any, NextResponse);
-  if (authResult instanceof NextResponse) return authResult;
+  await requireAuth(req as any, NextResponse);
 
   const roles = [
     "superadmin",
@@ -17,11 +14,8 @@ export async function GET(req: Request) {
     "member",
   ];
 
-  return NextResponse.json(
-    {
-      success: true,
-      data: roles,
-    },
-    { status: 200 }
-  );
+  return NextResponse.json({
+    message: "Roles fetched successfully",
+    roles,
+  });
 }
