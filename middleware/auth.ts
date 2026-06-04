@@ -1,1 +1,5 @@
-export function auth() { return true; }
+export function requireAuth() {
+  // Placeholder auth check
+  return true;
+}
+
