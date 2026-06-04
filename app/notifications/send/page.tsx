@@ -178,4 +178,76 @@ export default function SendNotificationPage() {
             value={form.coach_id}
             onChange={handleChange}
           >
-            <option value="">
+            <option value="">— None —</option>
+            {coaches.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.first_name} {c.last_name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* SEND TO ADMIN */}
+        <div>
+          <label className="block mb-1">Send to Admin?</label>
+          <select
+            name="send_to_admin"
+            className="w-full px-4 py-2 border rounded-md"
+            value={form.send_to_admin}
+            onChange={handleChange}
+          >
+            <option value="">— No —</option>
+            <option value="yes">Yes</option>
+          </select>
+        </div>
+
+        {/* SEND TO ALL COACHES */}
+        <div>
+          <label className="block mb-1">Send to All Coaches?</label>
+          <select
+            name="send_to_all_coaches"
+            className="w-full px-4 py-2 border rounded-md"
+            value={form.send_to_all_coaches}
+            onChange={handleChange}
+          >
+            <option value="">— No —</option>
+            <option value="yes">Yes</option>
+          </select>
+        </div>
+
+        {/* TITLE */}
+        <div>
+          <label className="block mb-1">Title</label>
+          <input
+            type="text"
+            name="title"
+            className="w-full px-4 py-2 border rounded-md"
+            value={form.title}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        {/* MESSAGE */}
+        <div>
+          <label className="block mb-1">Message</label>
+          <textarea
+            name="message"
+            className="w-full px-4 py-2 border rounded-md"
+            rows={4}
+            value={form.message}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700"
+        >
+          Send
+        </button>
+      </form>
+    </div>
+  );
+}
