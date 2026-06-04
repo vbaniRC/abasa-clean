@@ -1,1 +1,4 @@
-export function role() { return true; }
+export function requireRole() {
+  // Placeholder role check
+  return true;
+}
