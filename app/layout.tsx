@@ -1,31 +1,17 @@
 import "./globals.css";
-import Sidebar from "./components/Sidebar";
-import Header from "./components/Header";
-import { AuthProvider } from "./providers/AuthProvider";
+import type { ReactNode } from "react";
+import RootProvider from "./providers/RootProvider";
 
 export const metadata = {
-  title: "ABASA Sport",
-  description: "Sportska platforma za klubove i članove",
+  title: "ABASA",
+  description: "ABASA Clean App",
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="hr">
-      <body className="bg-gray-50 text-gray-900">
-        <AuthProvider>
-          <div className="min-h-screen flex">
-
-            {/* SIDEBAR */}
-            <Sidebar />
-
-            {/* MAIN CONTENT */}
-            <main className="flex-1 p-10">
-              <Header />
-              {children}
-            </main>
-
-          </div>
-        </AuthProvider>
+    <html lang="en">
+      <body>
+        <RootProvider>{children}</RootProvider>
       </body>
     </html>
   );
