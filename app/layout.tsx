@@ -1,18 +1,12 @@
-import "./globals.css";
-import type { ReactNode } from "react";
-import RootProvider from "./providers/RootProvider";
-
 export const metadata = {
   title: "ABASA",
-  description: "ABASA Clean App",
+  description: "Management Panel",
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
-        <RootProvider>{children}</RootProvider>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

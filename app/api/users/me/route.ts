@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import { requireAuth } from "@/middleware/auth";
-import { supabase } from "@/lib/supabase";
+import { requireAuth } from "@/lib/middleware/auth";
+import { requireRole } from "@/lib/middleware/role";
+
 
 export async function GET(req: Request) {
   // AUTH

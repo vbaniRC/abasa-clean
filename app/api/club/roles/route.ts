@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
-import { requireAuth } from "@/middleware/auth";
+import { requireAuth } from "@/lib/middleware/auth";
+import { requireRole } from "@/lib/middleware/role";
+
 
 export async function GET(req: Request) {
   // AUTH → bilo koji logirani user može vidjeti role

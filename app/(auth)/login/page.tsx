@@ -1,87 +1,41 @@
-"use client";
-
-import { useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
-import { useRouter } from "next/navigation";
-
 export default function LoginPage() {
-  const router = useRouter();
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setErrorMsg("");
-    setLoading(true);
-
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) {
-      setErrorMsg(error.message);
-      setLoading(false);
-      return;
-    }
-
-    router.push("/dashboard");
-  };
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
-      <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-md border border-gray-200">
+    <div className="min-h-screen bg-neutral-950 flex items-center justify-center">
+      <div className="w-full max-w-sm bg-neutral-950 border border-neutral-800 rounded-xl p-6 shadow-xl">
+        
+        <h1 className="text-2xl font-semibold text-white mb-1">ABASA</h1>
+        <p className="text-sm text-neutral-400 mb-6">Sign in to your account</p>
 
-        <h1 className="text-3xl font-bold mb-6 text-center">Sign In</h1>
-
-        {errorMsg && (
-          <p className="mb-4 text-red-600 text-center">{errorMsg}</p>
-        )}
-
-        <form onSubmit={handleLogin} className="space-y-5">
-
+        <form className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
+            <label className="block text-sm text-neutral-300 mb-1">Email</label>
             <input
               type="email"
-              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
+              placeholder="you@example.com"
+              className="w-full px-3 py-2 rounded-lg bg-neutral-900 border border-neutral-700 text-neutral-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
+            <label className="block text-sm text-neutral-300 mb-1">Password</label>
             <input
               type="password"
-              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
+              placeholder="••••••••"
+              className="w-full px-3 py-2 rounded-lg bg-neutral-900 border border-neutral-700 text-neutral-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 
           <button
             type="submit"
-            disabled={loading}
-            className="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition disabled:opacity-50"
+            className="w-full py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium"
           >
-            {loading ? "Signing in..." : "Sign In"}
+            Continue
           </button>
-
         </form>
 
-        <p className="text-center text-sm text-gray-600 mt-4">
-          Don't have an account?{" "}
-          <a href="/register" className="text-blue-600 hover:underline">
-            Register
-          </a>
+        <p className="text-center text-xs text-neutral-500 mt-4">
+          ABASA — login
         </p>
-
       </div>
     </div>
   );
